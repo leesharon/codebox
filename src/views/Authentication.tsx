@@ -1,17 +1,20 @@
 import { useState, FunctionComponent } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { NavLink, useParams } from 'react-router-dom'
+import { NavLink, useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 import { Heading1, Heading5, PrimaryButton } from '../components/Generics'
-import { Credentials } from 'models/user.interface'
+import { Credentials, User } from 'models/user.interface'
+import { userService } from 'services/user.service'
 
 interface Props {
+  setLoggedinUser: React.Dispatch<React.SetStateAction<User | undefined>>
 }
 
-export const Authentication: FunctionComponent<Props> = () => {
+export const Authentication: FunctionComponent<Props> = ({ setLoggedinUser }) => {
   const params = useParams()
+  const navigate = useNavigate()
   const [status, setStatus] = useState(params.status)
   const [invalidCredentialsDiv, setInvalidCredentialsDiv] = useState(false)
 
@@ -41,8 +44,9 @@ export const Authentication: FunctionComponent<Props> = () => {
       if (status === 'signup') {
         (async () => {
           try {
-            console.log('values: ', values)
-
+            const user = await userService.signup(values)
+            setLoggedinUser(user)
+            if (user.isMentor) navigate('/lobby')
           } catch (err) {
             console.log(err, 'cannot signup')
             setInvalidCredentialsDiv(true)
@@ -52,7 +56,9 @@ export const Authentication: FunctionComponent<Props> = () => {
       else if (status === 'login') {
         (async () => {
           try {
-            console.log('values: ', values)
+            const user = await userService.login(values)
+            setLoggedinUser(user)
+            if (user.isMentor) navigate('/lobby')
           } catch (err) {
             console.log(err, 'cannot login')
             setInvalidCredentialsDiv(true)
