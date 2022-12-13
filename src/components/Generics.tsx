@@ -48,11 +48,22 @@ const Heading5 = styled.h5<{ align?: string; fontSize?: string; weight?: number 
   ${({ align }) => align && `text-align: ${align}`};
 `;
 
+const PrimaryButton = styled.button<{ width?: string }>`
+  font-weight: bold;
+  text-align: center;
+  transition: background-color 200ms ease-in-out, border 200ms ease-in-out,
+  transform 200ms ease-in-out, color 200ms ease-in-out;
+  font-size: 14px;
+  border-radius: 9999px;
+  padding: 10px 0;
+`;
+
 export {
+  PrimaryButton,
   FlexRow,
   FlexColumn,
   MainLayout,
   Heading1,
   Heading3,
-  Heading5
+  Heading5,
 };

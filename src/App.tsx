@@ -2,6 +2,7 @@ import { Route, Routes, Navigate } from 'react-router-dom'
 import styled from 'styled-components'
 import './styles/global.scss'
 import { AppHeader } from './components/AppHeader'
+import { Authentication } from 'views/Authentication'
 
 function App() {
 
@@ -10,7 +11,7 @@ function App() {
       <AppHeader />
       <MainContainer>
         <Routes>
-          <Route path='/user/:status' element={<h1>codebox</h1>} />
+          <Route path='/user/:status' element={<Authentication />} />
           <Route path="*" element={<Navigate to='/user/login' replace />} />
         </Routes>
       </MainContainer>
