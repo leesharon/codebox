@@ -161,12 +161,8 @@ const FormHeading = styled(Heading5)`
 const WrongCredentials = styled.div<{ $display: boolean }>`
   border-radius: 3px;
   box-shadow: rgb(255 255 255 / 20%) 0px 0px 10px;
-  rgb(9 30 66 / 30%) 0px 0px 1px;
   font-size: 12px;
-  line-height: 20px;
   padding: 16px;
-  transform: rotateX(0deg);
-  transform-origin: 50% 0px;
   transition-property: visibility, height, margin-bottom, opacity, transform, padding;
   transition-duration: 0s, 0.2s, 0.2s, 0.2s, 0.2s;
   transition-timing-function: ease-in-out;
@@ -190,7 +186,6 @@ const Input = styled.input`
   color: #2d3748;
   border-radius: 9999px;
   color: rgb(77, 77, 77);
-  display: block;
   width: 316px;
   height: 40px;
   transition: background-color, border-color 0.5s;
