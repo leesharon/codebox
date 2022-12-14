@@ -4,8 +4,11 @@ import { Fragment, FunctionComponent, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { codeblockService } from 'services/codeblock.service'
 import styled from 'styled-components'
+import { previewItem } from 'styles/setup/mixins'
 import { FlexColumn, FlexRow, Heading1 } from '../components/Generics'
 import { User } from '../models/user.interface'
+import { v4 as uuidv4 } from 'uuid'
+import { toast } from 'react-toastify'
 
 interface Props {
     loggedinUser: User | undefined
@@ -40,7 +43,30 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
     }
 
     const onSelectStudent = (student: User) => {
-        console.log('onSelectStudent ~ student', student)
+        const uuid = uuidv4();
+        (async () => {
+            try {
+                toast.success('A link to the session has been copied to your clipboard.', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: "light",
+                })
+
+            } catch (err) {
+                console.log('Cannot add session', err)
+                toast.error('Oops! something went wrong.', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: "light",
+                })
+            }
+        })()
     }
 
     return (
@@ -52,9 +78,9 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
                 </Heading1>
                 {codeblock && <CodeblockList>
                     {codeblock.map((codeblock, idx) => (
-                        <ListItem key={codeblock._id} onClick={() => { onSelectCodeblock(codeblock._id) }} align='center'>
+                        <CodeblockPreview key={codeblock._id} onClick={() => { onSelectCodeblock(codeblock._id) }} align='center'>
                             {idx + 1 + '. ' + codeblock.title}
-                        </ListItem>
+                        </CodeblockPreview>
                     ))}
                 </CodeblockList>}
                 {<StudentsModal
@@ -77,14 +103,6 @@ const CodeblockList = styled(FlexColumn)`
     }
 `
 
-const ListItem = styled(FlexRow)`
-    padding: 15px 10px;
-    border-radius: 3px;
-    min-width: 300px;
-    cursor: pointer;
-    transition: color 200ms ease-in-out;
-
-    &:hover {
-        color: ${({ theme: { bluePrimary } }) => bluePrimary};
-    }
+const CodeblockPreview = styled(FlexRow)`
+    ${previewItem}
 `

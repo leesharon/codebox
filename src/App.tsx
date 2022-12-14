@@ -1,6 +1,8 @@
 import { Route, Routes, Navigate } from 'react-router-dom'
 import styled from 'styled-components'
 import './styles/global.scss'
+import "react-toastify/dist/ReactToastify.css"
+import { ToastContainer } from 'react-toastify'
 import { AppHeader } from './components/AppHeader'
 import { Authentication } from 'views/Authentication'
 import { useState } from 'react'
@@ -12,6 +14,7 @@ function App() {
 
   return (
     <AppContainer>
+      <ToastContainer />
       <AppHeader />
       <MainContainer>
         <Routes>
