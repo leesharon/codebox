@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { Heading1, Heading5, PrimaryButton } from '../components/Generics'
 import { Credentials, User } from 'models/user.interface'
 import { userService } from 'services/user.service'
+import { toast } from 'react-toastify'
 
 interface Props {
   setLoggedinUser: React.Dispatch<React.SetStateAction<User | undefined>>
@@ -14,13 +15,6 @@ interface Props {
 
 export const Authentication: FunctionComponent<Props> = ({ setLoggedinUser }) => {
   const navigate = useNavigate()
-  const [invalidCredentialsDiv, setInvalidCredentialsDiv] = useState(false)
-
-  useEffect(() => {
-    return () => {
-      setInvalidCredentialsDiv(false)
-    }
-  }, [setInvalidCredentialsDiv])
 
   const formik = useFormik({
     initialValues: {
@@ -45,7 +39,14 @@ export const Authentication: FunctionComponent<Props> = ({ setLoggedinUser }) =>
           if (user.isMentor) navigate('/lobby')
         } catch (err) {
           console.log(err, 'cannot login')
-          setInvalidCredentialsDiv(true)
+          toast.error('Invalid username or password', {
+            position: "top-right",
+            autoClose: 3000,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "light",
+          })
         }
       })()
     },
@@ -56,9 +57,6 @@ export const Authentication: FunctionComponent<Props> = ({ setLoggedinUser }) =>
       <Heading1 fontSize={'3em'}>CodeBox</Heading1>
       <Form onSubmit={formik.handleSubmit}>
         <FormHeading fontSize='1em'>Log in to CodeBox</FormHeading>
-        <WrongCredentials $display={invalidCredentialsDiv}>
-          Incorrect email address and / or password.
-        </WrongCredentials>
         <Input
           id="username"
           name="username"
@@ -126,26 +124,6 @@ const Form = styled.form`
 const FormHeading = styled(Heading5)`
   text-align: center;
   font-weight: bold;
-`
-
-const WrongCredentials = styled.div<{ $display: boolean }>`
-  border-radius: 3px;
-  box-shadow: rgb(255 255 255 / 20%) 0px 0px 10px;
-  font-size: 12px;
-  padding: 16px;
-  transition-property: visibility, height, margin-bottom, opacity, transform, padding;
-  transition-duration: 0s, 0.2s, 0.2s, 0.2s, 0.2s;
-  transition-timing-function: ease-in-out;
-
-  ${({ $display }) => $display ? `
-    margin: 24px 0;
-  ` : `
-    height: 0px;
-    margin-bottom: 0px;
-    opacity: 0;
-    transform: rotateX(-90deg);
-    visibility: none;
-   `}
 `
 
 const Input = styled.input`
