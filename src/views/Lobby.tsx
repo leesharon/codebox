@@ -9,6 +9,8 @@ import { FlexColumn, FlexRow, Heading1 } from '../components/Generics'
 import { User } from '../models/user.interface'
 import { v4 as uuidv4 } from 'uuid'
 import { toast } from 'react-toastify'
+import { sessionService } from 'services/session.service'
+import { utilService } from 'services/util.service'
 
 interface Props {
     loggedinUser: User | undefined
@@ -16,7 +18,8 @@ interface Props {
 
 export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
     const navigate = useNavigate()
-    const [codeblock, setCodeblocks] = useState<Codeblock[] | undefined>()
+    const [codeblock, setCodeblocks] = useState<Codeblock[]>()
+    const [selectedCodeblockId, setSelectedCodeblockId] = useState<null | string>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
@@ -26,8 +29,8 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
     useEffect(() => {
         (async () => {
             try {
-                const codeBlocksDB = await codeblockService.query()
-                setCodeblocks(codeBlocksDB)
+                const codeblocksDB = await codeblockService.query()
+                setCodeblocks(codeblocksDB)
             } catch (err) {
                 console.log('Cannot get code blocks', err)
             }
@@ -35,25 +38,36 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
     }, [setCodeblocks])
 
     const onSelectCodeblock = (codeblockId: string) => {
+        setSelectedCodeblockId(codeblockId)
         setIsModalOpen(true)
     }
 
     const onCloseModal = () => {
+        setSelectedCodeblockId(null)
         setIsModalOpen(false)
     }
 
     const onSelectStudent = (student: User) => {
+        if (!selectedCodeblockId) return
         const uuid = uuidv4();
         (async () => {
             try {
+                await sessionService.add({
+                    uuid,
+                    user: student,
+                    codeBlock_id: selectedCodeblockId
+                })
+                const baseUrl = utilService.getBaseUrl()
+                const relativeUrl = '/codeblock/' + selectedCodeblockId + '/' + uuid
+                navigator.clipboard.writeText(baseUrl + relativeUrl + '?student_login=' + student.username)
                 toast.success('A link to the session has been copied to your clipboard.', {
                     position: "top-right",
                     autoClose: 3000,
                     closeOnClick: true,
                     pauseOnHover: true,
-                    draggable: true,
                     theme: "light",
                 })
+                navigate(relativeUrl)
 
             } catch (err) {
                 console.log('Cannot add session', err)
@@ -62,7 +76,6 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
                     autoClose: 3000,
                     closeOnClick: true,
                     pauseOnHover: true,
-                    draggable: true,
                     theme: "light",
                 })
             }

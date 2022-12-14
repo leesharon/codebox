@@ -124,6 +124,7 @@ const Form = styled.form`
 const FormHeading = styled(Heading5)`
   text-align: center;
   font-weight: bold;
+  margin-bottom: 25px;
 `
 
 const Input = styled.input`
