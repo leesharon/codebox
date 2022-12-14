@@ -15,7 +15,7 @@ function App() {
       <AppHeader />
       <MainContainer>
         <Routes>
-          <Route path='/user/:status' element={<Authentication setLoggedinUser={setLoggedinUser} />} />
+          <Route path='/user/login' element={<Authentication setLoggedinUser={setLoggedinUser} />} />
           <Route path='/lobby' element={<Lobby loggedinUser={loggedinUser} />} />
           <Route path="*" element={<Navigate to='/user/login' replace />} />
         </Routes>

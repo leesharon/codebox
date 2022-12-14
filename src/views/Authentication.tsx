@@ -13,17 +13,14 @@ interface Props {
 }
 
 export const Authentication: FunctionComponent<Props> = ({ setLoggedinUser }) => {
-  const params = useParams()
   const navigate = useNavigate()
-  const [status, setStatus] = useState(params.status)
   const [invalidCredentialsDiv, setInvalidCredentialsDiv] = useState(false)
 
   useEffect(() => {
-    setStatus(params.status)
     return () => {
       setInvalidCredentialsDiv(false)
     }
-  }, [params.status])
+  }, [setInvalidCredentialsDiv])
 
   const formik = useFormik({
     initialValues: {
@@ -41,41 +38,24 @@ export const Authentication: FunctionComponent<Props> = ({ setLoggedinUser }) =>
         .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
     }),
     onSubmit: (values: Credentials) => {
-      if (status === 'signup') {
-        (async () => {
-          try {
-            const user = await userService.signup(values)
-            setLoggedinUser(user)
-            if (user.isMentor) navigate('/lobby')
-          } catch (err) {
-            console.log(err, 'cannot signup')
-            setInvalidCredentialsDiv(true)
-          }
-        })()
-      }
-      else if (status === 'login') {
-        (async () => {
-          try {
-            const user = await userService.login(values)
-            setLoggedinUser(user)
-            if (user.isMentor) navigate('/lobby')
-          } catch (err) {
-            console.log(err, 'cannot login')
-            setInvalidCredentialsDiv(true)
-          }
-        })()
-      }
+      (async () => {
+        try {
+          const user = await userService.login(values)
+          setLoggedinUser(user)
+          if (user.isMentor) navigate('/lobby')
+        } catch (err) {
+          console.log(err, 'cannot login')
+          setInvalidCredentialsDiv(true)
+        }
+      })()
     },
   })
-
-  const formTxt =
-    status === 'login' ? 'Log in to CodeBox' : 'Sign up for your account'
 
   return (
     <FormContainer>
       <Heading1 fontSize={'3em'}>CodeBox</Heading1>
       <Form onSubmit={formik.handleSubmit}>
-        <FormHeading fontSize='1em'>{formTxt}</FormHeading>
+        <FormHeading fontSize='1em'>Log in to CodeBox</FormHeading>
         <WrongCredentials $display={invalidCredentialsDiv}>
           Incorrect email address and / or password.
         </WrongCredentials>
@@ -107,17 +87,7 @@ export const Authentication: FunctionComponent<Props> = ({ setLoggedinUser }) =>
         ) : (
           <span>&nbsp;</span>
         )}
-        <Sumbit type="submit">{formTxt}</Sumbit>
-        {status === 'login' && (
-          <NavLink className="already-have-account" to={'/user/signup'}>
-            Sign up for an account
-          </NavLink>
-        )}
-        {status === 'signup' && (
-          <NavLink className="already-have-account" to={'/user/login'}>
-            Already have an account? Log In
-          </NavLink>
-        )}
+        <Sumbit type="submit">Log in to CodeBox</Sumbit>
       </Form>
     </FormContainer >
   )
@@ -205,7 +175,6 @@ const Error = styled.span`
 
 const Sumbit = styled(PrimaryButton)`
   background-color: ${({ theme: { blackPrimary } }) => blackPrimary};
-  margin-bottom: 15px;
 
   &:hover {
     background-color: black;
