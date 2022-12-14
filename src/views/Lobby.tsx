@@ -1,15 +1,15 @@
-import { StudentsModal } from 'components/StudentsModal'
-import { Codeblock } from 'models/codeblock.interface'
 import { Fragment, FunctionComponent, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
-import { codeblockService } from 'services/codeblock.service'
 import styled from 'styled-components'
-import { previewItem } from 'styles/setup/mixins'
 import { FlexColumn, FlexRow, Heading1 } from '../components/Generics'
 import { User } from '../models/user.interface'
+import { Codeblock } from 'models/codeblock.interface'
+import { codeblockService } from 'services/codeblock.service'
+import { StudentsModal } from 'components/StudentsModal'
 import { v4 as uuidv4 } from 'uuid'
-import { toast } from 'react-toastify'
 import { sessionService } from 'services/session.service'
+import { toast } from 'react-toastify'
+import { previewItem } from 'styles/setup/mixins'
 import { utilService } from 'services/util.service'
 
 interface Props {
@@ -18,33 +18,46 @@ interface Props {
 
 export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
     const navigate = useNavigate()
-    const [codeblock, setCodeblocks] = useState<Codeblock[]>()
+    const [codeBlocks, setCodeBlocks] = useState<Codeblock[]>()
     const [selectedCodeblockId, setSelectedCodeblockId] = useState<null | string>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
 
+    // Handles user authorization
     useEffect(() => {
-        if (!loggedinUser || !loggedinUser.isMentor) navigate('/')
+        if (!loggedinUser || !loggedinUser.isMentor) {
+            let errMsg = 'You must log in first to access this page.'
+            if (loggedinUser?.isMentor === false) errMsg = 'Only mentors are allowed to access this page.'
+            toast.error(errMsg, {
+                position: "top-right",
+                autoClose: 3000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                theme: "light",
+            })
+            navigate('/')
+        }
     }, [loggedinUser, navigate])
 
+    // Gets codeblocks from db
     useEffect(() => {
         (async () => {
             try {
                 const codeblocksDB = await codeblockService.query()
-                setCodeblocks(codeblocksDB)
+                setCodeBlocks(codeblocksDB)
             } catch (err) {
                 console.log('Cannot get code blocks', err)
             }
         })()
-    }, [setCodeblocks])
-
-    const onSelectCodeblock = (codeblockId: string) => {
-        setSelectedCodeblockId(codeblockId)
-        setIsModalOpen(true)
-    }
+    }, [setCodeBlocks])
 
     const onCloseModal = () => {
         setSelectedCodeblockId(null)
         setIsModalOpen(false)
+    }
+
+    const onSelectCodeblock = (codeblockId: string) => {
+        setSelectedCodeblockId(codeblockId)
+        setIsModalOpen(true)
     }
 
     const onSelectStudent = (student: User) => {
@@ -89,10 +102,10 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
                     {loggedinUser && `Hello ${loggedinUser.username}, `}
                     Choose a Code Block.
                 </Heading1>
-                {codeblock && <CodeblockList>
-                    {codeblock.map((codeblock, idx) => (
-                        <CodeblockPreview key={codeblock._id} onClick={() => { onSelectCodeblock(codeblock._id) }} align='center'>
-                            {idx + 1 + '. ' + codeblock.title}
+                {codeBlocks && <CodeblockList>
+                    {codeBlocks.map((codeBlock, idx) => (
+                        <CodeblockPreview key={codeBlock._id} onClick={() => { onSelectCodeblock(codeBlock._id) }} align='center'>
+                            {idx + 1 + '. ' + codeBlock.title}
                         </CodeblockPreview>
                     ))}
                 </CodeblockList>}

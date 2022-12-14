@@ -1,19 +1,19 @@
-import { useState, FunctionComponent } from 'react'
+import React, { FunctionComponent } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { NavLink, useNavigate, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { Heading1, Heading5, PrimaryButton } from '../components/Generics'
-import { Credentials, User } from 'models/user.interface'
-import { userService } from 'services/user.service'
+import { userService } from '../services/user.service'
+import { Credentials, User } from '../models/user.interface'
 import { toast } from 'react-toastify'
 
 interface Props {
   setLoggedinUser: React.Dispatch<React.SetStateAction<User | undefined>>
 }
 
-export const Authentication: FunctionComponent<Props> = ({ setLoggedinUser }) => {
+export const Login: FunctionComponent<Props> = ({ setLoggedinUser }) => {
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
 
   const formik = useFormik({
@@ -32,11 +32,24 @@ export const Authentication: FunctionComponent<Props> = ({ setLoggedinUser }) =>
         .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
     }),
     onSubmit: (values: Credentials) => {
+      const studentLoginName = searchParams.get('student_login');
       (async () => {
         try {
           const user = await userService.login(values)
           setLoggedinUser(user)
           if (user.isMentor) navigate('/lobby')
+          else if (studentLoginName && studentLoginName === user.username) {
+            navigate(-1)
+          } else {
+            toast.error('You must be granted an invitation link in order to access another page.', {
+              position: "top-right",
+              autoClose: 3000,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              theme: "light",
+            })
+          }
         } catch (err) {
           console.log(err, 'cannot login')
           toast.error('Invalid username or password', {
@@ -135,6 +148,7 @@ const Input = styled.input`
   color: #2d3748;
   border-radius: 9999px;
   color: rgb(77, 77, 77);
+  display: block;
   width: 316px;
   height: 40px;
   transition: background-color, border-color 0.5s;
@@ -154,6 +168,7 @@ const Error = styled.span`
 
 const Sumbit = styled(PrimaryButton)`
   background-color: ${({ theme: { blackPrimary } }) => blackPrimary};
+  margin-bottom: 15px;
 
   &:hover {
     background-color: black;

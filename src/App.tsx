@@ -4,7 +4,7 @@ import './styles/global.scss'
 import "react-toastify/dist/ReactToastify.css"
 import { ToastContainer } from 'react-toastify'
 import { AppHeader } from './components/AppHeader'
-import { Authentication } from 'views/Authentication'
+import { Login } from 'views/Login'
 import { useState } from 'react'
 import { User } from 'models/user.interface'
 import { Lobby } from 'views/Lobby'
@@ -18,7 +18,7 @@ function App() {
       <AppHeader />
       <MainContainer>
         <Routes>
-          <Route path='/user/login' element={<Authentication setLoggedinUser={setLoggedinUser} />} />
+          <Route path='/user/login' element={<Login setLoggedinUser={setLoggedinUser} />} />
           <Route path='/lobby' element={<Lobby loggedinUser={loggedinUser} />} />
           <Route path='/codeblock/:codeblockId/:uuid' element={<h1>codeblock</h1>} />
           <Route path="*" element={<Navigate to='/user/login' replace />} />

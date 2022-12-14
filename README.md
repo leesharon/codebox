@@ -4,6 +4,9 @@ This is a [React.js](https://reactjs.org/) project bootstrapped with [`create-re
 
 // add a link here
 
+You can use `Cody` as username and `Cody12345` as password to login as a mentor.
+Use `MichaelCohen` & `Michael12345` to login as a student.
+
 ## Features
 
 - [React.js 18](https://reactjs.org/blog/2022/03/29/react-v18.html) - Blog introduce react v18.0.
@@ -50,7 +53,7 @@ You can check out [the React.js GitHub repository](https://github.com/reactjs) -
 
 ## Deploy on Render
 
-This app is deployed on [Render](https://render.com/docs), I highly recommend it. It is free & easy.
+The easiest way to deploy your react app is to use the [Render](https://render.com/docs) from the creators of Next.js.
 
 ---
 
