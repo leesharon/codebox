@@ -1,3 +1,4 @@
+import { StudentsModal } from 'components/StudentsModal'
 import { Codeblock } from 'models/codeblock.interface'
 import { Fragment, FunctionComponent, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
@@ -13,6 +14,7 @@ interface Props {
 export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
     const navigate = useNavigate()
     const [codeblock, setCodeblocks] = useState<Codeblock[] | undefined>()
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
         if (!loggedinUser || !loggedinUser.isMentor) navigate('/')
@@ -30,7 +32,11 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
     }, [setCodeblocks])
 
     const onSelectCodeblock = (codeblockId: string) => {
-        console.log(codeblockId)
+        setIsModalOpen(true)
+    }
+
+    const onCloseModal = () => {
+        setIsModalOpen(false)
     }
 
     return (
@@ -47,6 +53,10 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
                         </ListItem>
                     ))}
                 </CodeblockList>}
+                {isModalOpen && <StudentsModal
+                    onCloseModal={onCloseModal}
+                    isModalOpen={isModalOpen}
+                />}
             </LobbyContainer>
         </Fragment>
     )
