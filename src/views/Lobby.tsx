@@ -39,6 +39,10 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
         setIsModalOpen(false)
     }
 
+    const onSelectStudent = (student: User) => {
+        console.log('onSelectStudent ~ student', student)
+    }
+
     return (
         <Fragment>
             <LobbyContainer align='center' gap={50}>
@@ -56,6 +60,7 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
                 {isModalOpen && <StudentsModal
                     onCloseModal={onCloseModal}
                     isModalOpen={isModalOpen}
+                    onSelectStudent={onSelectStudent}
                 />}
             </LobbyContainer>
         </Fragment>
