@@ -57,7 +57,7 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
                         </ListItem>
                     ))}
                 </CodeblockList>}
-                {isModalOpen && <StudentsModal
+                {<StudentsModal
                     onCloseModal={onCloseModal}
                     isModalOpen={isModalOpen}
                     onSelectStudent={onSelectStudent}
