@@ -1,6 +1,6 @@
 import { FlexColumn, Heading1 } from 'components/Generics'
 import { User } from 'models/user.interface'
-import { FunctionComponent, useEffect, useState } from "react"
+import { FunctionComponent, useCallback, useEffect, useState } from "react"
 import styled from 'styled-components'
 import CodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
@@ -8,8 +8,9 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { codeblockService } from 'services/codeblock.service'
 import { Codeblock } from 'models/codeblock.interface'
 import { toast } from 'react-toastify'
+import { socketService } from 'services/socket.service'
 import { vscodeDark } from '@uiw/codemirror-theme-vscode'
-import _ from 'lodash'
+import { utilService } from 'services/util.service'
 
 interface Props {
     loggedinUser: User | undefined
@@ -23,6 +24,7 @@ const CodeblockView: FunctionComponent<Props> = ({ loggedinUser }) => {
 
     // Handles authorization to this page
     useEffect(() => {
+        // TODO renavigate later
         const studentLoginName = searchParams.get('student_login')
         if (!loggedinUser) {
             let path = '/user/login'
@@ -57,11 +59,27 @@ const CodeblockView: FunctionComponent<Props> = ({ loggedinUser }) => {
     }, [params, setCodeblock])
 
     const handleChange = (val: string) => {
-        if (loggedinUser?.isMentor) return
-        if (!codeblock) return
+        if (loggedinUser?.isMentor || !codeblock) return
         codeblockService.update({ _id: codeblock._id, code: val })
     }
-    const throttleHandleChange = _.throttle(handleChange, 1000)
+    const throttleHandleChange = utilService.throttle(handleChange, 1000)
+
+    // Fires socket join room event
+    useEffect(() => {
+        if (!codeblock) return
+        socketService.emit('join-codeblock', codeblock._id)
+    }, [codeblock])
+
+    // This func is invoked when the broadcast from server emits 'update-codeblock' event
+    const socketUpdateCodeblock = useCallback((updatedCodeblock: Codeblock) => {
+        // TODO check later for accurate types here
+        setCodeblock((prevState) => ({ ...prevState, code: updatedCodeblock.code } as Codeblock))
+    }, [])
+
+    // Handles update code block events
+    useEffect(() => {
+        socketService.on('update-codeblock', socketUpdateCodeblock)
+    }, [socketUpdateCodeblock])
 
     return (
         <CodeblockContainer align='center'>
