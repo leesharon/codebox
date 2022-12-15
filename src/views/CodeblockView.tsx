@@ -9,6 +9,7 @@ import { codeblockService } from 'services/codeblock.service'
 import { Codeblock } from 'models/codeblock.interface'
 import { toast } from 'react-toastify'
 import { vscodeDark } from '@uiw/codemirror-theme-vscode'
+import _ from 'lodash'
 
 interface Props {
     loggedinUser: User | undefined
@@ -48,17 +49,19 @@ const CodeblockView: FunctionComponent<Props> = ({ loggedinUser }) => {
 
     // Handles getting code block from DB
     useEffect(() => {
-        if (params.codeblockId) {
-            (async () => {
-                const codeblockDB = await codeblockService.getById(params.codeblockId as string)
-                setCodeblock(codeblockDB)
-            })()
-        }
+        (async () => {
+            if (!params.codeblockId) return
+            const codeblockDB = await codeblockService.getById(params.codeblockId)
+            setCodeblock(codeblockDB)
+        })()
     }, [params, setCodeblock])
 
     const handleChange = (val: string) => {
-        console.log('handleChange ~ val', val)
+        if (loggedinUser?.isMentor) return
+        if (!codeblock) return
+        codeblockService.update({ _id: codeblock._id, code: val })
     }
+    const throttleHandleChange = _.throttle(handleChange, 1000)
 
     return (
         <CodeblockContainer align='center'>
@@ -68,7 +71,7 @@ const CodeblockView: FunctionComponent<Props> = ({ loggedinUser }) => {
 
             {loggedinUser && codeblock && <CodeMirror
                 extensions={[javascript({ jsx: true })]}
-                onChange={handleChange}
+                onChange={throttleHandleChange}
                 theme={vscodeDark}
                 height="400px"
                 width="800px"

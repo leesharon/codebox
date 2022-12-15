@@ -4,7 +4,8 @@ const BASE_URL = `codeblock/`
 
 export const codeblockService = {
    query,
-   getById
+   getById,
+   update
 }
 
 async function query() {
@@ -20,5 +21,13 @@ async function getById(codeBlockId: string) {
       return httpService.get(BASE_URL + codeBlockId)
    } catch (err) {
       console.log('Cannot get code block', err)
+   }
+}
+
+async function update(codeBlock: { _id: string, code: string }) {
+   try {
+      return httpService.put(BASE_URL + codeBlock._id, codeBlock)
+   } catch (err) {
+      console.log('Cannot update code block', err)
    }
 }
