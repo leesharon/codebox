@@ -65,7 +65,7 @@ const CodeblockView: FunctionComponent<Props> = ({ loggedinUser }) => {
 
     // This func is invoked when the broadcast from server emits 'update-codeblock' event
     const socketUpdateCodeblock = useCallback((updatedCodeblock: Codeblock) => {
-        // TODO check later for accurate types here
+        // TODO check later for accurate type here
         setCodeblock((prevState) => ({ ...prevState, code: updatedCodeblock.code } as Codeblock))
     }, [])
 

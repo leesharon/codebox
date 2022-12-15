@@ -28,9 +28,7 @@ async function login(credentials: {}) {
    }
 }
 
-// TODO remove the function if not being used
 function getLoggedInUser() {
    const user = sessionStorage.getItem(STORAGE_KEY_LOGGEDIN)
    if (user) return JSON.parse(user)
 }
-
