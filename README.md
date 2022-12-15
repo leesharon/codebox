@@ -2,7 +2,7 @@ This is a [React.js](https://reactjs.org/) project bootstrapped with [`create-re
 
 ## Demo
 
-// add a link here
+Here is a link to the [project.](https://codebox-7x7t.onrender.com/#/)
 
 You can use `Cody` as username and `Cody12345` as password to login as a mentor.
 Use `MichaelCohen` & `Michael12345` to login as a student.
@@ -55,7 +55,7 @@ You can check out [the React.js GitHub repository](https://github.com/reactjs) -
 
 ## Deploy on Render
 
-This project is deployed with [Render](https://render.com/docs).
+This project is deployed with [Render](https://render.com/docs). A demo is available [here](https://codebox-7x7t.onrender.com/#/).
 
 ---
 
