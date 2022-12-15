@@ -76,7 +76,6 @@ const CodeblockView: FunctionComponent<Props> = ({ loggedinUser }) => {
 
     const handleChange = (val: string) => {
         if (loggedinUser?.isMentor || !codeblock) return
-        if (!codeblock) return
         if (codeblock.solution === val) {
             toast.success('Congratulations! You just found the solution!!!', {
                 position: "top-right",

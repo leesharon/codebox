@@ -2,7 +2,7 @@ import { User } from 'models/user.interface'
 import { Fragment, FunctionComponent, useEffect, useState } from "react"
 import { userService } from 'services/user.service'
 import styled from 'styled-components'
-import { previewItem } from 'styles/setup/mixins'
+import { flexAlign, previewItem } from 'styles/setup/mixins'
 import { FlexColumn, FlexRow, Heading3 } from './Generics'
 
 interface Props {
@@ -25,7 +25,7 @@ export const StudentsModal: FunctionComponent<Props> = ({ onCloseModal, isModalO
         <Fragment>
             {isModalOpen && <Screen onClick={onCloseModal} />}
             <ModalContainer isModalOpen={isModalOpen} gap={10}>
-                <CloseBtn onClick={onCloseModal}>❌</CloseBtn>
+                <CloseBtn onClick={onCloseModal}>x</CloseBtn>
                 <Heading3 align='center' fontSize='1.5em'>
                     Choose one of your students
                 </Heading3>
@@ -48,7 +48,7 @@ export const StudentsModal: FunctionComponent<Props> = ({ onCloseModal, isModalO
 }
 
 const Screen = styled.div`
-    position: fixed;
+    position: absolute;
     top: 0;
     bottom: 0;
     right: 0;
@@ -59,7 +59,7 @@ const Screen = styled.div`
 `
 
 const ModalContainer = styled(FlexColumn) <{ isModalOpen: boolean }> `
-    transform: translateY(-250%);
+    transform: translateY(-600%);
     position: fixed;
     top: 50%;
     padding: 40px;
@@ -74,9 +74,10 @@ const CloseBtn = styled.button`
     position: absolute;
     right: 10px;
     top: 10px;
-    padding: 10px 12px;
+    padding: 5px 12px;
     border-radius: 50%;
     transition: background-color 100ms;
+    font-size: 20px;
 
     &:hover {
         background-color: ${({ theme: { blackLight } }) => blackLight};
