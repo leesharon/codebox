@@ -58,12 +58,6 @@ const CodeblockView: FunctionComponent<Props> = ({ loggedinUser }) => {
         })()
     }, [params, setCodeblock])
 
-    const handleChange = (val: string) => {
-        if (loggedinUser?.isMentor || !codeblock) return
-        codeblockService.update({ _id: codeblock._id, code: val })
-    }
-    const throttleHandleChange = utilService.throttle(handleChange, 1000)
-
     // Fires socket join room event
     useEffect(() => {
         if (!codeblock) return
@@ -80,6 +74,22 @@ const CodeblockView: FunctionComponent<Props> = ({ loggedinUser }) => {
     useEffect(() => {
         socketService.on('update-codeblock', socketUpdateCodeblock)
     }, [socketUpdateCodeblock])
+
+    const handleChange = (val: string) => {
+        if (loggedinUser?.isMentor || !codeblock) return
+        if (!codeblock) return
+        if (codeblock.solution === val) {
+            toast.success('Congratulations! You just found the solution!!!', {
+                position: "top-right",
+                autoClose: 3000,
+                closeOnClick: true,
+                pauseOnHover: true,
+                theme: "light",
+            })
+        }
+        codeblockService.update({ _id: codeblock._id, code: val })
+    }
+    const throttleHandleChange = utilService.throttle(handleChange, 1000)
 
     return (
         <CodeblockContainer align='center'>
