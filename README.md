@@ -13,6 +13,8 @@ Use `MichaelCohen` & `Michael12345` to login as a student.
 - [Typescript 4](https://www.typescriptlang.org/) - Documentation of typescript.
 - [Styled Components](https://styled-components.com/docs) - Documentation of styled components.
 - [Sockets.IO](https://socket.io/docs/v4/) - Documentation of sockets.IO.
+- [CodeMirror](https://codemirror.net/docs/) - Documentation of CodeMirror.
+- [formik](https://formik.org/docs/overview) - Documentation of formik.
 
 ## Usage
 
@@ -21,7 +23,7 @@ This project using node >= 14.19.2 & yarn
 ### Installation
 
 ```bash
-git clone https://github.com/danangekal/next-typescript-pwa-starter.git
+git clone https://github.com/leesharon/codebox-frontend.git
 yarn install
 ```
 
@@ -53,8 +55,10 @@ You can check out [the React.js GitHub repository](https://github.com/reactjs) -
 
 ## Deploy on Render
 
-The easiest way to deploy your react app is to use the [Render](https://render.com/docs) from the creators of Next.js.
+This project is deployed with [Render](https://render.com/docs).
 
 ---
 
-Copyright © 2022 by Lee Sharon
+### Authors
+
+ - [Lee Sharon](https://github.com/leesharon)

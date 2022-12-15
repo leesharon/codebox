@@ -12,7 +12,7 @@ interface Props {
   setLoggedinUser: React.Dispatch<React.SetStateAction<User | undefined>>
 }
 
-export const Login: FunctionComponent<Props> = ({ setLoggedinUser }) => {
+const Login: FunctionComponent<Props> = ({ setLoggedinUser }) => {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
 
@@ -33,6 +33,7 @@ export const Login: FunctionComponent<Props> = ({ setLoggedinUser }) => {
     }),
     onSubmit: (values: Credentials) => {
       const studentLoginName = searchParams.get('student_login');
+
       (async () => {
         try {
           const user = await userService.login(values)
@@ -122,16 +123,6 @@ const Form = styled.form`
     background: ${({ theme: { blackLight } }) => blackLight};
     border-radius: 3px;
     box-shadow: rgb(255 255 255 / 20%) 0px 0px 10px;
-
-    a {
-        margin: auto;
-        color: ${({ theme: { bluePrimary } }) => bluePrimary};
-        font-size: 14px;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
 `
 
 const FormHeading = styled(Heading5)`
@@ -142,7 +133,7 @@ const FormHeading = styled(Heading5)`
 
 const Input = styled.input`
   padding: 15px;
-  font-size: 14px;
+  font-size: ${({ theme: { fontSizeS } }) => fontSizeS};
   border: 2px solid #dfe1e5;
   background-color: ${({ theme: { grayPrimary } }) => grayPrimary};
   color: #2d3748;
@@ -161,7 +152,7 @@ const Input = styled.input`
 `
 
 const Error = styled.span`
-  font-size: 12px;
+  font-size: ${({ theme: { fontSizeXS } }) => fontSizeXS};
   color: #e53e3e;
   margin: 3px 0 15px 3px;
 `
@@ -175,3 +166,5 @@ const Sumbit = styled(PrimaryButton)`
     color: white;
   }
 `
+
+export { Login }

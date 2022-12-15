@@ -16,9 +16,9 @@ interface Props {
     loggedinUser: User | undefined
 }
 
-export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
+const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
     const navigate = useNavigate()
-    const [codeBlocks, setCodeBlocks] = useState<Codeblock[]>()
+    const [codeblocks, setCodeblocks] = useState<Codeblock[]>()
     const [selectedCodeblockId, setSelectedCodeblockId] = useState<null | string>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -43,12 +43,12 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
         (async () => {
             try {
                 const codeblocksDB = await codeblockService.query()
-                setCodeBlocks(codeblocksDB)
+                setCodeblocks(codeblocksDB)
             } catch (err) {
                 console.log('Cannot get code blocks', err)
             }
         })()
-    }, [setCodeBlocks])
+    }, [setCodeblocks])
 
     const onCloseModal = () => {
         setSelectedCodeblockId(null)
@@ -68,7 +68,7 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
                 await sessionService.add({
                     uuid,
                     user: student,
-                    codeBlock_id: selectedCodeblockId
+                    codeblock_id: selectedCodeblockId
                 })
                 const baseUrl = utilService.getBaseUrl()
                 const relativeUrl = '/codeblock/' + selectedCodeblockId + '/' + uuid
@@ -102,10 +102,10 @@ export const Lobby: FunctionComponent<Props> = ({ loggedinUser }) => {
                     {loggedinUser && `Hello ${loggedinUser.username}, `}
                     Choose a Code Block.
                 </Heading1>
-                {codeBlocks && <CodeblockList>
-                    {codeBlocks.map((codeBlock, idx) => (
-                        <CodeblockPreview key={codeBlock._id} onClick={() => { onSelectCodeblock(codeBlock._id) }} align='center'>
-                            {idx + 1 + '. ' + codeBlock.title}
+                {codeblocks && <CodeblockList>
+                    {codeblocks.map((codeblock, idx) => (
+                        <CodeblockPreview key={codeblock._id} onClick={() => { onSelectCodeblock(codeblock._id) }} align='center'>
+                            {idx + 1 + '. ' + codeblock.title}
                         </CodeblockPreview>
                     ))}
                 </CodeblockList>}
@@ -132,3 +132,5 @@ const CodeblockList = styled(FlexColumn)`
 const CodeblockPreview = styled(FlexRow)`
     ${previewItem}
 `
+
+export { Lobby }

@@ -1,12 +1,11 @@
 import { httpService } from './http.service'
 
-const STORAGE_KEY_LOGGEDIN = 'loggedInUser'
+const STORAGE_KEY_LOGGEDIN = 'loggedinUser'
 
 export const userService = {
    query,
    login,
-   signup,
-   getLoggedInUser,
+   getLoggedInUser
 }
 
 async function query(filterBy: {} = {}) {
@@ -29,19 +28,9 @@ async function login(credentials: {}) {
    }
 }
 
-async function signup(credentials: {}) {
-   try {
-      const user = await httpService.post('auth/signup', credentials)
-      sessionStorage.setItem(STORAGE_KEY_LOGGEDIN, JSON.stringify(user))
-      return user
-   } catch (err) {
-      console.log('Cannot signup', err)
-      throw err
-   }
-}
-
+// TODO remove the function if not being used
 function getLoggedInUser() {
-   return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN) as string)
-
+   const user = sessionStorage.getItem(STORAGE_KEY_LOGGEDIN)
+   if (user) return JSON.parse(user)
 }
 

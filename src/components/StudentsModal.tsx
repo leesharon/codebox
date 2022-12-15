@@ -7,8 +7,8 @@ import { FlexColumn, FlexRow, Heading3 } from './Generics'
 
 interface Props {
     onCloseModal: () => void
-    isModalOpen: boolean
     onSelectStudent: (student: User) => void
+    isModalOpen: boolean
 }
 
 export const StudentsModal: FunctionComponent<Props> = ({ onCloseModal, isModalOpen, onSelectStudent }) => {

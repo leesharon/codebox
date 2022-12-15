@@ -9,6 +9,7 @@ socketService.setup()
 
 function createSocketService() {
   let socket: Socket
+
   const socketService = {
     setup() {
       socket = io(baseUrl)
@@ -27,5 +28,6 @@ function createSocketService() {
       socket.emit('set-user-socket', userId)
     },
   }
+
   return socketService
 }

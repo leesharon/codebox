@@ -16,17 +16,17 @@ async function query() {
    }
 }
 
-async function getById(codeBlockId: string) {
+async function getById(codeblockId: string) {
    try {
-      return httpService.get(BASE_URL + codeBlockId)
+      return httpService.get(BASE_URL + codeblockId)
    } catch (err) {
       console.log('Cannot get code block', err)
    }
 }
 
-async function update(codeBlock: { _id: string, code: string }) {
+async function update(codeblock: { _id: string, code: string }) {
    try {
-      return httpService.put(BASE_URL + codeBlock._id, codeBlock)
+      return httpService.put(BASE_URL + codeblock._id, codeblock)
    } catch (err) {
       console.log('Cannot update code block', err)
    }

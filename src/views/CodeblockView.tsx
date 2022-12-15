@@ -24,7 +24,6 @@ const CodeblockView: FunctionComponent<Props> = ({ loggedinUser }) => {
 
     // Handles authorization to this page
     useEffect(() => {
-        // TODO renavigate later
         const studentLoginName = searchParams.get('student_login')
         if (!loggedinUser) {
             let path = '/user/login'
@@ -56,7 +55,7 @@ const CodeblockView: FunctionComponent<Props> = ({ loggedinUser }) => {
             const codeblockDB = await codeblockService.getById(params.codeblockId)
             setCodeblock(codeblockDB)
         })()
-    }, [params, setCodeblock])
+    }, [params.codeblockId, setCodeblock])
 
     // Fires socket join room event
     useEffect(() => {
@@ -96,7 +95,6 @@ const CodeblockView: FunctionComponent<Props> = ({ loggedinUser }) => {
             <Heading1 fontSize='3em' align='center' mb={30}>
                 {codeblock?.title}
             </Heading1>
-
             {loggedinUser && codeblock && <CodeMirror
                 extensions={[javascript({ jsx: true })]}
                 onChange={throttleHandleChange}

@@ -14,7 +14,7 @@ export const AppHeader = () => {
 }
 
 const Header = styled.header`
-  font-size: 20px;
+  font-size: ${({ theme: { fontSizeL } }) => fontSizeL};
   background-color: ${({ theme: { blackLight } }) => blackLight};
   color: ${({ theme: { grayPrimary } }) => grayPrimary};
   display: flex;
